@@ -34,51 +34,56 @@ var userdata;
 
 
 function searchuser() {
+    setTimeout(function () {
+        listElement.innerHTML = '';
+        var user = inputElement.value;
 
-    listElement.innerHTML = '';
-    var user = inputElement.value;
+        var date1 = new Date();
+        var time1 = date1.getTime();
 
-    var minhaPromise = function () {
-        return new Promise(function (resolve, reject) {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', `https://api.github.com/users/${user}/repos`);
-            xhr.send(null);
+        var minhaPromise = function () {
+            return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', `https://api.github.com/users/${user}/repos`);
+                xhr.send(null);
 
-            xhr.onreadystatechange = function () {
-                /*while (xhr.readyState != 4) {
-                    var listTitle = document.createTextNode('Carregando...')
-                    listElement.appendChild(listTitle)
-                }*/
-                console.log(xhr.readyState)
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        resolve(JSON.parse(xhr.responseText));
-                    }
-                    else {
-                        reject('Erro na requisição')
+                var listTitle = document.createTextNode('Carregando...')
+                listElement.appendChild(listTitle)
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        var date2 = new Date();
+                        time2 = date2.getTime();
+                        if (xhr.status === 200) {
+                            listElement.innerHTML = ''
+                            console.log(time2 - time1)
+                            resolve(JSON.parse(xhr.responseText));
+                        }
+                        else {
+                            reject('Erro na requisição')
+                        }
                     }
                 }
-            }
-        });
-    }
+            });
+        }
 
-    minhaPromise()
-        .then(function (response) {
-            console.log(response);
-            userdata = response;
+        minhaPromise()
+            .then(function (response) {
+                console.log(response);
+                userdata = response;
 
-            var listTitle = document.createTextNode(`Os repositórios de ${user} são:`)
-            listElement.appendChild(listTitle)
+                var listTitle = document.createTextNode(`Os repositórios de ${user} são:`)
+                listElement.appendChild(listTitle)
 
-            for (var repo of userdata) {
-                var listIitem = document.createElement('li');
-                var textItem = document.createTextNode(repo.name);
+                for (var repo of userdata) {
+                    var listIitem = document.createElement('li');
+                    var textItem = document.createTextNode(repo.name);
 
-                listIitem.appendChild(textItem);
-                listElement.appendChild(listIitem);
-            }
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+                    listIitem.appendChild(textItem);
+                    listElement.appendChild(listIitem);
+                }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }, 2000)
 }

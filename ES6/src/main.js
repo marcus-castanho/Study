@@ -35,7 +35,8 @@ class app {
 
         if (repoInput.length === 0) {
             alert('Insira um repositório.');
-            this.inputEl.value = '';
+            this.formElement.reset();
+            //this.inputEl.value = '';
             this.setLoading(false)
             return;
         }
@@ -52,13 +53,15 @@ class app {
                 html_url
             });
 
-            this.inputEl.value = '';
+            this.formElement.reset();
+            //this.inputEl.value = '';
 
             this.render();
         }
         catch (err) {
             alert('O repositório não existe.');
-            this.inputEl.value = '';
+            this.formElement.reset();
+            //this.inputEl.value = '';
         }
 
         this.setLoading(false);

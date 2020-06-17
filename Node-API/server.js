@@ -6,12 +6,12 @@ const requireDir = require('require-dir')
 //Initiate app
 const app = express();
 app.use(express.json());
-app.user(cors());
+app.use(cors());
 
 //Initiate DB
 mongoose.connect('mongodb://192.168.99.100:27017/nodeapi', { useNewUrlParser: true });
 
-requireDir('./src/models');
+requireDir('./src/models'); 
 
 //Routes
 app.use('/api', require("./src/routes"))
